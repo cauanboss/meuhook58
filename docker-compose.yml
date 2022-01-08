@@ -1,0 +1,10 @@
+services:
+  project:
+    container_name: project
+    image: project
+    build: .
+    command: npm run start
+    ports:
+      - "3000:3000"
+    volumes:
+      - '.:/usr/local/udemy'
