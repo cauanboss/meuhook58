@@ -4,7 +4,7 @@ const isObjectEqual = (a, b) => {
   return JSON.stringify(a) === JSON.stringify(b);
 };
 
-const useFetch = (url, options) => {
+export const useFetch = (url, options) => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -62,45 +62,3 @@ const useFetch = (url, options) => {
 
   return [result, loading];
 };
-
-const App = () => {
-  // const [result, loading] = useFetch('https://jsonplaceholder.typicode.com/posts');
-  const [postId, setPostId] = useState('');
-
-  const [result, loading] = useFetch(`https://jsonplaceholder.typicode.com/posts/${postId}`, {
-    method: 'GET',
-    header: {
-      abs: '1' + postId,
-    },
-  });
-
-  const handleClick = (id) => {
-    setPostId(id);
-  };
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (!loading && result) {
-    return (
-      <div>
-        {result?.length > 0 ? (
-          result.map((p) => (
-            <div key={`post-${p.id}`} onClick={() => handleClick(p.id)}>
-              <p>{p.title}</p>
-            </div>
-          ))
-        ) : (
-          <div onClick={() => handleClick('')}>
-            <p>{result.title}</p>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  return <h1>Oi</h1>;
-};
-
-export default App;
