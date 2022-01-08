@@ -30,12 +30,15 @@ const useFetch = (url, options) => {
 
   useEffect(() => {
     let wait = false;
+    const controller = new AbortController();
+    const signal = controller.signal;
     setLoading(true);
 
     const fetchData = async () => {
       await new Promise((r) => setTimeout(r, 1000));
+
       try {
-        const response = await fetch(urlRef.current, optionsRef.current);
+        const response = await fetch(urlRef.current, { signal, ...optionsRef.current });
         const jsonResult = await response.json();
 
         if (!wait) {
@@ -53,6 +56,7 @@ const useFetch = (url, options) => {
     fetchData();
     return () => {
       wait = true;
+      controller.abort;
     };
   }, [shouldLoad]);
 
@@ -69,10 +73,6 @@ const App = () => {
       abs: '1' + postId,
     },
   });
-
-  useEffect(() => {
-    console.log(postId);
-  }, [postId]);
 
   const handleClick = (id) => {
     setPostId(id);
